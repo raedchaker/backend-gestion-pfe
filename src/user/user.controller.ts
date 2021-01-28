@@ -13,17 +13,8 @@ export class UserController {
 
     @Get()
     testUser(){
-        return 'cc'
+        return 'test'
     }
-    @Post()
-    addUser(
-         @Body() user:UserCreateDTO
-    ){
-        return user
-    }
-    //1-delete user 
-    //2-update user
-    //3-get all users
-    //4-get one user 
+   
 
 }

@@ -1,4 +1,4 @@
-import { Column, Entity, ObjectID, ObjectIdColumn, PrimaryColumn } from "typeorm";
+import { Column, Entity, ObjectID, ObjectIdColumn } from "typeorm";
 import { Timestamp } from "../../generics/Timestamp";
 
 export enum UserRoleEnum {

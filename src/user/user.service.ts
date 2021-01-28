@@ -13,33 +13,6 @@ export class UserService {
 
     }
 
-    findUserByCIn(cin){
-        const user= this.userRepository.findOne({cin})
-        return user ===null?false:user
-    }
-    //find user by email : if existed return user : else return false
-    findUserByMail(email){
-        const user = this.userRepository.findOne({
-            email
-        })
-
-        if(user!==null ) 
-        return user
-        return false
-    }
-    //find user by phone : if existed return user :else return false
-    findUserByPhone(phone){
-        const user = this.userRepository.findOne({
-            phone
-        })
-        if (user!==null)
-        return user 
-        return false
-    }
-    //find student : if existed return student :else false 
-
-    addUser(user:UserCreateDTO){
-return 
-      
-    }
+    
+    
 }
