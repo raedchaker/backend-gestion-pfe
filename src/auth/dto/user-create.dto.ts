@@ -20,7 +20,6 @@ export class UserCreateDTO {
 
   @IsOptional()
   @IsNumber()
-  @MinLength(7)
   insNumber: number;
 
   @IsString()

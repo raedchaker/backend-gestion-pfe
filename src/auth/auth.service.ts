@@ -47,8 +47,9 @@ export class AuthService {
   }
 
   async getStudentByIns(insNumber): Promise<UserModel | boolean> {
-    const student = await this.userRepository.findOne(insNumber);
-    return student === null ? false : student;
+    const student = await this.userRepository.findOne({insNumber});
+    //console.log(student)
+    return student === undefined ? false : student;
   }
 
   async register(createUserDto: UserCreateDTO): Promise<Partial<UserModel>> {
