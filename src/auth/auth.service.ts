@@ -1,5 +1,8 @@
-import {  ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,68 +16,60 @@ import { UserCreateDTO } from 'src/auth/dto/user-create.dto';
 
 @Injectable()
 export class AuthService {
-
   constructor(
-    
     private jwtService: JwtService,
     @InjectRepository(UserModel)
-    private userRepository : Repository<UserModel>
-
+    private userRepository: Repository<UserModel>,
   ) {}
 
-
-
   async login(credentials: LoginUserDto) {
+    const { email, password } = credentials;
 
-    const {email, password} = credentials;
+    const user = await this.userRepository.findOne({ email });
 
-    const user = await this.userRepository.findOne({email});
-    
     // console.log(user);
-    
-      if(!user) {
- 
-        throw new NotFoundException("User doesn't exist");
-      } else {
-        
-        if ( await bcrypt.compare(password, user.password)) {
-          const payload = {
 
-            email: user.email,
-          }
-          const jwt = this.jwtService.sign(payload);
-          return  {
-            "access_token" : jwt
-          }
-        } else {
-          throw new NotFoundException('Wrong credentials');
-        }
+    if (!user) {
+      throw new NotFoundException("User doesn't exist");
+    } else {
+      if (await bcrypt.compare(password, user.password)) {
+        const payload = {
+          email: user.email,
+        };
+        const jwt = this.jwtService.sign(payload);
+        return {
+          access_token: jwt,
+        };
+      } else {
+        throw new NotFoundException('Wrong credentials');
       }
+    }
   }
 
-
-async getStudentByIns(insNumber):Promise<UserModel|boolean>{
-  const student=await this.userRepository.findOne(insNumber)
-  return student===null ?false:student
-
-}
+  async getStudentByIns(insNumber): Promise<UserModel | boolean> {
+    const student = await this.userRepository.findOne(insNumber);
+    return student === null ? false : student;
+  }
 
   async register(createUserDto: UserCreateDTO): Promise<Partial<UserModel>> {
-    if(createUserDto.role==UserRoleEnum.STUDENT && await this.getStudentByIns(createUserDto.insNumber) !==false){
-      throw new ConflictException(`Inscription number already used`)
+    if (
+      createUserDto.role == UserRoleEnum.STUDENT &&
+      (await this.getStudentByIns(createUserDto.insNumber)) !== false
+    ) {
+      throw new ConflictException(`Inscription number already used`);
     }
 
     const user = await this.userRepository.create({
-      ...createUserDto
+      ...createUserDto,
     });
 
     user.salt = await bcrypt.genSalt();
 
     user.password = await bcrypt.hash(user.password, user.salt);
-    try{
+    try {
       await this.userRepository.save(user);
     } catch (e) {
-      console.log(e)
+      console.log(e);
       throw new ConflictException(`duplicate email or cin or phone `);
     }
     return {
@@ -82,7 +77,7 @@ async getStudentByIns(insNumber):Promise<UserModel|boolean>{
       firstname: user.firstname,
       lastname: user.lastname,
       email: user.email,
-      role : user.role,
+      role: user.role,
     };
   }
 }

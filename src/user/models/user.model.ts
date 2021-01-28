@@ -1,54 +1,52 @@
-import { Column, Entity, ObjectID, ObjectIdColumn } from "typeorm";
-import { Timestamp } from "../../generics/Timestamp";
+import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { Timestamp } from '../../generics/Timestamp';
 
 export enum UserRoleEnum {
-    ADMIN = 'admin',
-    STUDENT = 'student',
-    TEACHER = 'teacher'
-  }
+  ADMIN = 'admin',
+  STUDENT = 'student',
+  TEACHER = 'teacher',
+}
 
 @Entity('users')
 export class UserModel extends Timestamp {
-    @ObjectIdColumn() 
-    id: ObjectID
+  @ObjectIdColumn()
+  id: ObjectID;
 
-    @Column({
-        unique:true
-    })
-    cin:number;
+  @Column({
+    unique: true,
+  })
+  cin: number;
 
-    @Column({
-       // unique:true
-    })
-    insNumber:number;
+  @Column({
+    // unique:true
+  })
+  insNumber: number;
 
-    @Column()
-    firstname:string;
+  @Column()
+  firstname: string;
 
-    @Column()
-    lastname:string;
+  @Column()
+  lastname: string;
 
-    @Column({
-        unique:true
-    })
-    email:string;
+  @Column({
+    unique: true,
+  })
+  email: string;
 
-    @Column()
-    password:string; 
+  @Column()
+  password: string;
 
-    @Column()
-    salt:string;
+  @Column()
+  salt: string;
 
-    @Column({
-        unique:true
-    })
-    phone:string
+  @Column({
+    unique: true,
+  })
+  phone: string;
 
-    @Column({
-        type:'enum',
-        enum:UserRoleEnum
-
-    })
-    role:string;
-
+  @Column({
+    type: 'enum',
+    enum: UserRoleEnum,
+  })
+  role: string;
 }
