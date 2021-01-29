@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SubjectModule } from './subject/subject.module';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -14,6 +15,7 @@ dotenv.config();
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
+    SubjectModule,
   ],
   controllers: [AppController],
   providers: [AppService],
