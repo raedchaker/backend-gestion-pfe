@@ -14,14 +14,14 @@ dotenv.config();
   imports: [
     UserModule,
     TypeOrmModule.forRoot({
-      useUnifiedTopology: true, 
+      useUnifiedTopology: true,
       type: 'mongodb',
       url: `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}${process.env.CLUSTER_NAME}.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
-      entities: [UserModel],
+      entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
     SubjectModule,
-    AuthModule, 
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

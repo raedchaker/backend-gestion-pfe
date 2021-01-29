@@ -1,6 +1,6 @@
 import { Controller, Body, Get, Param, Post } from '@nestjs/common';
 import { SubjectService } from './subject.service';
-import { SubjectEntity } from './entities/subject.entity';
+import { SubjectModel } from './models/subject.model';
 import { CreateSubjectDto } from './dto/create-subject.dto';
 
 @Controller('subject')
@@ -10,7 +10,7 @@ export class SubjectController {
   //Missing guards
 
   @Get('')
-  getSubjects(): Promise<SubjectEntity[]> {
+  getSubjects(): Promise<SubjectModel[]> {
     return this.subjectService.findAllSubjects();
   }
 
@@ -22,7 +22,7 @@ export class SubjectController {
   @Post()
   async addSubject(
     @Body() newSubject: CreateSubjectDto,
-  ): Promise<SubjectEntity> {
+  ): Promise<SubjectModel> {
     return await this.subjectService.addSubject(newSubject);
   }
 }

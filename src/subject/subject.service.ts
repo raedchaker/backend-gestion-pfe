@@ -1,17 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SubjectEntity } from './entities/subject.entity';
+import { SubjectModel } from './models/subject.model';
 import { Repository } from 'typeorm';
 import { CreateSubjectDto } from './dto/create-subject.dto';
 
 @Injectable()
 export class SubjectService {
   constructor(
-    @InjectRepository(SubjectEntity)
-    private readonly SubjectRepository: Repository<SubjectEntity>,
+    @InjectRepository(SubjectModel)
+    private readonly SubjectRepository: Repository<SubjectModel>,
   ) {}
 
-  async findAllSubjects(): Promise<SubjectEntity[]> {
+  async findAllSubjects(): Promise<SubjectModel[]> {
     return await this.SubjectRepository.find();
   }
 
@@ -21,7 +21,7 @@ export class SubjectService {
     throw new NotFoundException(`Le sujet n'est pas disponible`);
   }
 
-  async addSubject(newSubject: CreateSubjectDto): Promise<SubjectEntity> {
+  async addSubject(newSubject: CreateSubjectDto): Promise<SubjectModel> {
     const subject = this.SubjectRepository.create(newSubject);
     return await this.SubjectRepository.save(subject);
   }
