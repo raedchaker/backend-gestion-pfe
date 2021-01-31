@@ -15,7 +15,7 @@ export class UserService {
     return await this.userRepository.find()
   }
 
-  async searchUses(search:Partial<UserCreateDTO>){
+  async searchUses(search: Partial<UserCreateDTO>){
   
     return {...search }
 
