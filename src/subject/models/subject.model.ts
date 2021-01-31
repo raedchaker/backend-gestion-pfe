@@ -48,7 +48,7 @@ export class SubjectModel extends Timestamp {
     type => UserModel,
     user => user.studentSubject,
     {
-      eager: true,
+
       nullable: true,
       cascade: ['insert', 'update'],
       onDelete: 'SET NULL',
@@ -60,7 +60,7 @@ export class SubjectModel extends Timestamp {
     type => UserModel,
     user => user.teacherSubject,
     {
-      eager: true,
+
       nullable: true,
       cascade: ['insert', 'update'],
       onDelete: 'SET NULL',
