@@ -1,4 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { UserCreateDTO } from 'src/auth/dto/user-create.dto';
+import { ObjectID } from 'typeorm';
 import { UserModel } from './models/user.model';
 import { UserService } from './user.service';
 
@@ -8,8 +10,23 @@ export class UserController {
 
 
   @Get()
-  async getAllUsers():Promise<UserModel[]>{
+  async getAllUsers():Promise<Partial<UserModel>[]>{
     return await this.userService.getAllUsers(); 
+  }
+
+  @Post("search")
+  async searchUsers(@Body()search:Partial<UserCreateDTO>):Promise<Partial<UserModel>[]>{
+    return await this.userService.searchUses(search)
+  }
+
+  @Put(":id")
+  async editUser(){
+    return 1;
+  }
+
+  @Delete(':id')
+  async deleteUser(@Param('id')id:ObjectID){
+    return  await this.userService.deleteUser(id)
   }
 
 
