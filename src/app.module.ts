@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -7,9 +7,14 @@ import * as dotenv from 'dotenv';
 import { UserModule } from './user/user.module';
 import { UserModel } from './user/models/user.model';
 import { AuthModule } from './auth/auth.module';
-import {SoutenanceModule} from "./soutenance/soutenance.module";
+import { CorsMiddleware } from '@nest-middlewares/cors';
 
 dotenv.config();
+
+const corsOptions = {
+  origin: 'http://localhost:4200',
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
 @Module({
   imports: [
@@ -23,9 +28,13 @@ dotenv.config();
     }),
     SubjectModule,
     AuthModule,
-      SoutenanceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    CorsMiddleware.configure(corsOptions);
+    consumer.apply(CorsMiddleware).forRoutes('');
+  }
+}
