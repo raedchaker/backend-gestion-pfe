@@ -1,6 +1,6 @@
 import {
   Column,
-  Entity,
+  Entity, ManyToOne,
   ObjectID,
   ObjectIdColumn,
   OneToMany,
@@ -8,6 +8,8 @@ import {
 } from 'typeorm';
 import { Timestamp } from '../../generics/Timestamp';
 import { SubjectModel } from '../../subject/models/subject.model';
+import { SoutenanceModel } from '../../soutenance/models/soutenance.model';
+import { SessionModel } from '../../session/models/session.model';
 
 export enum UserRoleEnum {
   ADMIN = 'admin',
@@ -81,4 +83,28 @@ export class UserModel extends Timestamp {
     },
   )
   teacherSubject: SubjectModel;
+
+  @OneToMany(
+    type => SoutenanceModel,
+    soutenance => soutenance,
+    {
+
+      nullable: true,
+      cascade: ['insert', 'update'],
+      onDelete: 'SET NULL',
+    },
+  )
+  soutenances: SoutenanceModel[];
+
+  @OneToMany(
+    type => SessionModel,
+    session => session.presidentSession,
+    {
+
+      nullable: false,
+      cascade: ['insert', 'update'],
+      onDelete: 'SET NULL',
+    },
+  )
+  sessions: SessionModel[];
 }
