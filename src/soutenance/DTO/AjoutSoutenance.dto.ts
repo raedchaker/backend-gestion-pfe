@@ -1,29 +1,29 @@
-import {IsDate, IsNotEmpty} from "class-validator";
-import {SubjectModel} from "../../subject/models/subject.model";
-import {UserModel} from "../../user/models/user.model";
-import {SessionModel} from "../../session/models/session.model";
+import { IsDateString, IsMilitaryTime, IsNotEmpty, IsString } from 'class-validator';
+
 
 export class AjoutSoutenanceDto {
 
-    @IsDate()
+    @IsDateString()
     @IsNotEmpty()
     date: Date;
+    @IsMilitaryTime()
+    @IsNotEmpty()
+    heur;
 
     @IsNotEmpty()
-    sujet: SubjectModel;
+    sujet: string;
 
-
+    @IsString()
     @IsNotEmpty()
-    presidentJury: UserModel;
+    presidentJury: string;
 
+    @IsString()
     @IsNotEmpty()
-    examinateur: UserModel;
+    examinateur: string;
 
-    @IsNotEmpty()
-    responsable_INSAT: UserModel;
 
-    @IsNotEmpty()
-    session: SessionModel;
+
+
 
 
 }

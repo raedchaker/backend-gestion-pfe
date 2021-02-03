@@ -11,14 +11,20 @@ import {
 import {SubjectModel} from "../../subject/models/subject.model";
 import {SessionModel} from "../../session/models/session.model";
 
+
+
 @Entity('soutenance')
 export class SoutenanceModel extends Timestamp{
 
     @ObjectIdColumn()
     id: ObjectID;
 
-    @Column()
+    @Column( {
+      unique: true,
+    },)
     date: Date;
+    @Column('time', {name: 'heur'})
+    heur: Date;
 
     @OneToOne(
         type => SubjectModel,
@@ -57,20 +63,8 @@ export class SoutenanceModel extends Timestamp{
     examinateur: UserModel;
 
     @ManyToOne(
-        type => UserModel,
-        user => user.id,
-        {
-
-            nullable: true,
-            cascade: ['insert', 'update'],
-            onDelete: 'SET NULL',
-        },
-    )
-    responsable_INSAT: UserModel;
-
-    @ManyToOne(
         type => SessionModel,
-        session => session.id,
+        session => session.soutenances,
         {
 
             nullable: true,

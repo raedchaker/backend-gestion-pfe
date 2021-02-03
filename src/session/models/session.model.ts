@@ -25,7 +25,7 @@ export class SessionModel extends Timestamp{
 
     @ManyToOne(
         type => UserModel,
-        user => user.id,
+        user => user.sessions,
         {
 
             nullable: false,
@@ -44,5 +44,5 @@ export class SessionModel extends Timestamp{
             cascade: ['insert', 'update'],
             onDelete: 'SET NULL',
         },)
-    soutenances: SoutenanceModel;
+    soutenances: SoutenanceModel[];
 }

@@ -1,33 +1,31 @@
-import {IsDate, IsNotEmpty, IsOptional} from "class-validator";
+import { IsDateString, IsMilitaryTime, IsNotEmpty, IsOptional } from 'class-validator';
 import {SubjectModel} from "../../subject/models/subject.model";
 import {UserModel} from "../../user/models/user.model";
 import {SessionModel} from "../../session/models/session.model";
 
 export class UpdateSoutenanceDto{
-    @IsDate()
+    @IsDateString()
     @IsNotEmpty()
     @IsOptional()
     date: Date;
 
+    @IsMilitaryTime()
     @IsNotEmpty()
     @IsOptional()
-    sujet: SubjectModel;
+    heur: Date;
+
+    @IsNotEmpty()
+    @IsOptional()
+    sujet: string;
 
 
     @IsNotEmpty()
     @IsOptional()
-    presidentJury: UserModel;
+    presidentJury: string;
 
     @IsNotEmpty()
     @IsOptional()
-    examinateur: UserModel;
+    examinateur: string;
 
-    @IsNotEmpty()
-    @IsOptional()
-    responsable_INSAT: UserModel;
-
-    @IsNotEmpty()
-    @IsOptional()
-    session: SessionModel;
 
 }

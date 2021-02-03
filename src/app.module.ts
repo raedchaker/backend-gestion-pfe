@@ -5,9 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SubjectModule } from './subject/subject.module';
 import * as dotenv from 'dotenv';
 import { UserModule } from './user/user.module';
-import { UserModel } from './user/models/user.model';
 import { AuthModule } from './auth/auth.module';
 import { CorsMiddleware } from '@nest-middlewares/cors';
+import { SoutenanceModule } from './soutenance/soutenance.module';
 
 dotenv.config();
 
@@ -28,6 +28,7 @@ const corsOptions = {
     }),
     SubjectModule,
     AuthModule,
+    SoutenanceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

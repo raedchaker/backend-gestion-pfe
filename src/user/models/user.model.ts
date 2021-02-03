@@ -8,6 +8,8 @@ import {
 } from 'typeorm';
 import { Timestamp } from '../../generics/Timestamp';
 import { SubjectModel } from '../../subject/models/subject.model';
+import { Session } from 'inspector';
+import { SessionModel } from '../../session/models/session.model';
 
 export enum UserRoleEnum {
   ADMIN = 'admin',
@@ -79,4 +81,14 @@ export class UserModel extends Timestamp {
     },
   )
   teacherSubject: SubjectModel;
+  @OneToMany(
+    type => SessionModel,
+    session => session.presidentSession,
+    {
+      nullable: true,
+      cascade: ['insert', 'update'],
+      onDelete: 'SET NULL',
+    },
+  )
+  sessions: SessionModel;
 }
