@@ -14,6 +14,6 @@ export class CreateSubjectDto {
   description: string;
 
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
   teacher: string;
 }

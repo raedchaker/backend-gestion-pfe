@@ -58,7 +58,7 @@ export class UserModel extends Timestamp {
   })
   role: string;
 
-  @OneToOne(
+  /* @OneToOne(
     type => SubjectModel,
     subject => subject.student,
     {
@@ -78,5 +78,5 @@ export class UserModel extends Timestamp {
       onDelete: 'SET NULL',
     },
   )
-  teacherSubject: SubjectModel;
+  teacherSubject: SubjectModel;*/
 }

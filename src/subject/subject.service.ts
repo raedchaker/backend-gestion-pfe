@@ -22,7 +22,12 @@ export class SubjectService {
 
   async findSubjectById(id: number) {
     const subject = await this.SubjectRepository.findOne(id);
-    if (subject) return subject;
+    if (subject) {
+      const teacher = await this.UserRepository.findOne(subject.teacher);
+      const student = await this.UserRepository.findOne(subject.student);
+      const full_object = { ...subject, teacher, student };
+      return full_object;
+    }
     throw new NotFoundException(`Le sujet n'est pas disponible`);
   }
 
@@ -42,7 +47,6 @@ export class SubjectService {
     const teacher = await this.UserRepository.findOne({
       email: newSubject.teacher,
     });
-
     if (!teacher || teacher.role !== 'teacher') {
       throw new NotFoundException('email inexistant');
     }
@@ -52,8 +56,8 @@ export class SubjectService {
       description: newSubject.description,
     };
     const subject = this.SubjectRepository.create(newSub);
-    subject.teacher = teacher;
-    subject.student = student;
+    subject.teacher = teacher.id.toString();
+    subject.student = student.id.toString();
     return await this.SubjectRepository.save(subject);
   }
 }
