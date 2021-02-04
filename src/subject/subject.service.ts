@@ -16,8 +16,27 @@ export class SubjectService {
     private readonly UserRepository: Repository<UserModel>,
   ) {}
 
-  async findAllSubjects(): Promise<SubjectModel[]> {
-    return await this.SubjectRepository.find();
+  async findAllSubjects() {
+    const full_subjects = [];
+    const subjects = await this.SubjectRepository.find();
+    for (var i = 0; i < subjects.length; i++) {
+      const student = await this.UserRepository.findOne(subjects[i].student);
+
+      if (!subjects[i].teacher) {
+        full_subjects.push({ ...subjects[i], student });
+      } else {
+        const teacher = await this.UserRepository.findOne(subjects[i].teacher);
+        full_subjects.push({ ...subjects[i], teacher, student });
+      }
+    }
+
+    /*  subjects.forEach(async subject => {
+      const student = await this.SubjectRepository.findOne(subject.student);
+      const teacher = await this.SubjectRepository.findOne(subject.teacher);
+      full_subjects.push({ ...subject, teacher, student });
+    });*/
+
+    return full_subjects;
   }
 
   async findSubjectById(id: number) {
@@ -48,7 +67,7 @@ export class SubjectService {
       email: newSubject.teacher,
     });
     if (!teacher || teacher.role !== 'teacher') {
-      throw new NotFoundException('email inexistant');
+      throw new NotFoundException('email enseignant inexistant');
     }
     const newSub = {
       title: newSubject.title,
@@ -58,6 +77,38 @@ export class SubjectService {
     const subject = this.SubjectRepository.create(newSub);
     subject.teacher = teacher.id.toString();
     subject.student = student.id.toString();
+    return await this.SubjectRepository.save(subject);
+  }
+
+  async deleteSubject(id: number) {
+    return await this.SubjectRepository.delete(id);
+  }
+
+  async updateSubject(
+    id,
+    student,
+    updatedSubject: CreateSubjectDto,
+  ): Promise<SubjectModel> {
+    const teacher = await this.UserRepository.findOne({
+      email: updatedSubject.teacher,
+    });
+    if (!teacher || teacher.role !== 'teacher') {
+      throw new NotFoundException('email enseignant inexistant');
+    }
+    const newSub = {
+      title: updatedSubject.title,
+      enterprise: updatedSubject.enterprise,
+      description: updatedSubject.description,
+      teacher: teacher.id.toString(),
+      student: student.id.toString(),
+    };
+
+    const subjectToBeModified = await this.SubjectRepository.findOne(id);
+    const subject = await this.SubjectRepository.preload({
+      id: subjectToBeModified.id,
+      ...newSub,
+    });
+
     return await this.SubjectRepository.save(subject);
   }
 }

@@ -7,6 +7,7 @@ import {
   Req,
   UseGuards,
   Patch,
+  Delete,
 } from '@nestjs/common';
 import { SubjectService } from './subject.service';
 import { SubjectModel } from './models/subject.model';
@@ -17,8 +18,6 @@ import { AuthGuard } from '@nestjs/passport';
 @Controller('subject')
 export class SubjectController {
   constructor(private subjectService: SubjectService) {}
-
-  //Missing guards
 
   @Get('')
   async getSubjects(): Promise<SubjectModel[]> {
@@ -43,8 +42,24 @@ export class SubjectController {
 
   //only students should add subjects
   @UseGuards(AuthGuard('jwt'))
-  @Patch(':id')
+  @Patch('update/:id')
   async validateSubject(@Param('id') id: number) {
     return await this.subjectService.validateSubject(id);
+  }
+
+  @Delete(':id')
+  deleteSubject(@Param('id') id) {
+    return this.subjectService.deleteSubject(id);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch('update/:id')
+  updateSubject(
+    @Body() updatedSubject: CreateSubjectDto,
+    @Req() request: Request,
+    @Param('id') id,
+  ) {
+    const student = request.user;
+    return this.subjectService.updateSubject(id, student, updatedSubject);
   }
 }
