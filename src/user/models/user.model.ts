@@ -1,5 +1,13 @@
-import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ObjectID,
+  ObjectIdColumn,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { Timestamp } from '../../generics/Timestamp';
+import { SubjectModel } from '../../subject/models/subject.model';
 
 export enum UserRoleEnum {
   ADMIN = 'admin',
@@ -49,4 +57,26 @@ export class UserModel extends Timestamp {
     enum: UserRoleEnum,
   })
   role: string;
+
+  /* @OneToOne(
+    type => SubjectModel,
+    subject => subject.student,
+    {
+      nullable: true,
+      cascade: ['insert', 'update'],
+      onDelete: 'SET NULL',
+    },
+  )
+  studentSubject: SubjectModel;
+
+  @OneToMany(
+    type => SubjectModel,
+    subject => subject.teacher,
+    {
+      nullable: true,
+      cascade: ['insert', 'update'],
+      onDelete: 'SET NULL',
+    },
+  )
+  teacherSubject: SubjectModel;*/
 }

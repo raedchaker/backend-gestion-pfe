@@ -8,16 +8,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModel } from 'src/user/models/user.model';
 
 @Module({
-    imports: [
-      TypeOrmModule.forFeature([UserModel]),
-      PassportModule,
-      JwtModule.register({
-        secret: "jwtConstants.secret",
-        signOptions: { expiresIn: '60s' },
-      }),
-    ],
-    controllers : [AuthController],
-    providers: [JwtStrategy, AuthService],
-    exports: [],
-  })
+  imports: [
+    TypeOrmModule.forFeature([UserModel]),
+    PassportModule,
+    JwtModule.register({
+      secret: 'jwtConstants.secret',
+      signOptions: { expiresIn: '600s' },
+    }),
+  ],
+  controllers: [AuthController],
+  providers: [JwtStrategy, AuthService],
+  exports: [],
+})
 export class AuthModule {}
