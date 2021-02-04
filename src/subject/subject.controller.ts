@@ -25,6 +25,11 @@ export class SubjectController {
     return await this.subjectService.findAllSubjects();
   }
 
+  @Get('/teacher/:teacherId')
+  async getTeacherSubjects(@Param('teacherId') teacherId: string): Promise<SubjectModel[]> {
+    return await this.subjectService.getAllSubjectsByTeacherId(teacherId);
+  }
+
   @Get(':id')
   async getSubjectById(@Param('id') id: number) {
     return await this.subjectService.findSubjectById(id);

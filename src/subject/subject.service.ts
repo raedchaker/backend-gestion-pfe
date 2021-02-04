@@ -60,4 +60,8 @@ export class SubjectService {
     subject.student = student.id.toString();
     return await this.SubjectRepository.save(subject);
   }
+
+  async getAllSubjectsByTeacherId(teacherId: string): Promise<SubjectModel[]>{
+    return await this.SubjectRepository.find({teacher: teacherId});
+  }
 }
