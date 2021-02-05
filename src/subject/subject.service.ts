@@ -111,4 +111,14 @@ export class SubjectService {
 
     return await this.SubjectRepository.save(subject);
   }
+
+  async uploadRapport(student, filename) {
+    const subject = await this.SubjectRepository.findOne({
+      student: student.id.toString(),
+    });
+    await this.SubjectRepository.update(subject.id.toString(), {
+      rapport: filename,
+    });
+    return await this.SubjectRepository.findOne(subject.id.toString());
+  }
 }

@@ -8,12 +8,17 @@ import {
   UseGuards,
   Patch,
   Delete,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { SubjectService } from './subject.service';
 import { SubjectModel } from './models/subject.model';
 import { CreateSubjectDto } from './dto/create-subject.dto';
 import { Request } from 'express';
 import { AuthGuard } from '@nestjs/passport';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { v4 as uuid } from 'uuid';
 
 @Controller('subject')
 export class SubjectController {
@@ -61,5 +66,23 @@ export class SubjectController {
   ) {
     const student = request.user;
     return this.subjectService.updateSubject(id, student, updatedSubject);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post('upload')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: `./rapports`,
+        filename: (req, file, cb) => {
+          cb(null, `${uuid()}.pdf`);
+        },
+      }),
+    }),
+  )
+  async uploadRapport(@UploadedFile() file, @Req() request: Request) {
+    const student = request.user;
+    const filename = file.filename;
+    return await this.subjectService.uploadRapport(student, filename);
   }
 }
