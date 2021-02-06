@@ -58,11 +58,10 @@ export class UserModel extends Timestamp {
   })
   role: string;
 
-  @OneToOne(
+  /* @OneToOne(
     type => SubjectModel,
     subject => subject.student,
     {
-      eager: true,
       nullable: true,
       cascade: ['insert', 'update'],
       onDelete: 'SET NULL',
@@ -74,11 +73,10 @@ export class UserModel extends Timestamp {
     type => SubjectModel,
     subject => subject.teacher,
     {
-      eager: true,
       nullable: true,
       cascade: ['insert', 'update'],
       onDelete: 'SET NULL',
     },
   )
-  teacherSubject: SubjectModel;
+  teacherSubject: SubjectModel;*/
 }

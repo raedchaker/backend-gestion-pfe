@@ -44,27 +44,13 @@ export class SubjectModel extends Timestamp {
   })
   rapport: string;
 
-  @OneToOne(
-    type => UserModel,
-    user => user.studentSubject,
-    {
-      eager: true,
-      nullable: true,
-      cascade: ['insert', 'update'],
-      onDelete: 'SET NULL',
-    },
-  )
-  student: UserModel;
+  @Column({
+    length: 255,
+  })
+  student: string;
 
-  @ManyToOne(
-    type => UserModel,
-    user => user.teacherSubject,
-    {
-      eager: true,
-      nullable: true,
-      cascade: ['insert', 'update'],
-      onDelete: 'SET NULL',
-    },
-  )
-  teacher: UserModel;
+  @Column({
+    length: 255,
+  })
+  teacher: string;
 }
