@@ -19,6 +19,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuid } from 'uuid';
+import { PdfFileFilter } from 'src/generics/file-upload/file-upload.service';
 
 @Controller('subject')
 export class SubjectController {
@@ -73,11 +74,14 @@ export class SubjectController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: `./rapports`,
+        destination: `./files/rapports`,
         filename: (req, file, cb) => {
-          cb(null, `${uuid()}.pdf`);
+          const fileNameSPlit = file.originalname.split('.');
+          const fileExt = fileNameSPlit[fileNameSPlit.length - 1];
+          cb(null, `${uuid()}.${fileExt}`);
         },
       }),
+      fileFilter: PdfFileFilter,
     }),
   )
   async uploadRapport(@UploadedFile() file, @Req() request: Request) {
