@@ -9,7 +9,7 @@ export const imageFileFilter = (req, file, callback) => {
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
     return callback(
       new HttpException(
-        'Only image files are allowed!',
+        'Veillez importer une image !',
         HttpStatus.BAD_REQUEST,
       ),
       false,
@@ -22,7 +22,7 @@ export const PdfFileFilter = (req, file, callback) => {
     if (!file.originalname.match(/\.(pdf)$/)) {
       return callback(
         new HttpException(
-          'Only pdf files are allowed!',
+          'Veillez importer un fichier pdf !',
           HttpStatus.BAD_REQUEST,
         ),
         false,

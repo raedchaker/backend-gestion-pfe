@@ -37,20 +37,26 @@ export class AuthService {
     // console.log(user);
 
     if (!user) {
-      throw new NotFoundException("User doesn't exist");
+      throw new NotFoundException('Verifiez vos coordonnées !');
     } else {
       if (await bcrypt.compare(password, user.password)) {
         const payload = {
           email: user.email,
           role: user.role,
-          id: user.id
+          firstname:user.firstname,
+          lastname:user.lastname,
+          phone:user.phone,
+          cin:user.cin,
+          id: user.id,
+
+          
         };
         const jwt = this.jwtService.sign(payload);
         return {
           access_token: jwt,
         };
       } else {
-        throw new NotFoundException('Wrong credentials');
+        throw new NotFoundException('Verifiez vos coordonnées !');
       }
     }
   }
@@ -66,7 +72,7 @@ export class AuthService {
       createUserDto.role == UserRoleEnum.STUDENT &&
       (await this.getStudentByIns(createUserDto.insNumber)) !== false
     ) {
-      throw new ConflictException(`Inscription number already used`);
+      throw new ConflictException("Numero d'inscription déjà utilisé.");
     }
 
     const user = await this.userRepository.create({
@@ -83,19 +89,19 @@ export class AuthService {
           email: user.email,
         });
         if ((await users).length !== 0)
-          throw new ConflictException(`Duplicate email or cin or phone `);
+          throw new ConflictException("Email et/ou téléphone et/ou CIN déjà utilisé .");
         this.mailService.sendMail(
           user.email,
           `Hello ${user.firstname} ! You can login to the plateform PFE_INSAT using this email adress and ${user.password} as a password . `,
         );
       } catch (e) {
-        throw new Exception("Mail can't be sent , user not created");
+        throw new Exception("Email ne peut pas etre envoyé , et utilisateur non crée ");
       }
       user.password = await bcrypt.hash(user.password, user.salt);
       await this.userRepository.save(user);
     } catch (e) {
       console.log(e);
-      throw new ConflictException(`Duplicate email or cin or phone `);
+      throw new ConflictException("Email et/ou téléphone et/ou CIN déjà utilisé .");
     }
 
     return {
@@ -110,20 +116,20 @@ export class AuthService {
   async changePassword(changePwdDto: ChangePasswordDTO) {
     const { email, old_pwd, new_pwd, r_new_pwd } = changePwdDto;
     if (new_pwd !== r_new_pwd)
-      throw new NotFoundException('Passwords are different ');
+      throw new NotFoundException('Veillez repeter le meme mot de passe !');
     const user = await this.userRepository.findOne({ email: email });
     if (!user) {
-      throw new NotFoundException("User doesn't exist");
+      throw new NotFoundException("Utilisateur N'existe pas");
     }
 
     if (await bcrypt.compare(old_pwd, user.password)) {
       this.mailService.sendMail(
         user.email,
-        `Hello ${user.firstname} ! You can login to the plateform PFE_INSAT using this email adress and ${new_pwd} as a password . `,
+        `Bonjour  ${user.firstname} ! Vous pouvez connnecter à la plateforme PFE-INSAT en  utilisant cet email et  ${new_pwd} comme mot de passe . `,
       );
       user.password = await bcrypt.hash(new_pwd, user.salt);
       this.userRepository.save(user);
       return user;
-    } else throw new NotFoundException('Old password is incorrect');
+    } else throw new NotFoundException('Ancien mot de passe est incorrect .');
   }
 }

@@ -23,7 +23,7 @@ export class UserService {
   async getUserByEmail(email){
     const user = await this.userRepository.findOne({ email });
     if(!user)
-    throw new NotFoundException("User doesn't exist");
+    throw new NotFoundException("Utilisateur n'existe pas");
     else return user
   }
 
@@ -62,25 +62,25 @@ export class UserService {
   async updateUser(id:ObjectID,updateUser:UserUpdateDTO){
     const user=await this.userRepository.findOne(id)
     if(!user){
-      throw new NotFoundException("User Not Found")
+      throw new NotFoundException("Utilisateur n'existe pas")
     }
 
     if(user.cin !==updateUser.cin){
      const  user_cin=this.userRepository.findOne({cin:updateUser.cin})
      if(user_cin){
-       throw new BadRequestException("Cin already Used")
+       throw new BadRequestException("Cin est déjà utilisé")
      }
     }
     if(user.email !==updateUser.email){
       const  user_email=this.userRepository.findOne({email:updateUser.email})
       if(user_email){
-        throw new BadRequestException("Email already Used")
+        throw new BadRequestException("Email est deja utilisé")
       }
      }
      if(user.phone !==updateUser.phone){
       const  user_phone=this.userRepository.findOne({phone:updateUser.phone})
       if(user_phone){
-        throw new BadRequestException("Phone already Used")
+        throw new BadRequestException("Télèphone est déjà utilisé")
       }
      }
     user.firstname=updateUser.firstname
