@@ -10,17 +10,16 @@ import { SendMailService } from 'src/generics/send-mail/send-mail.service';
 import { UserService } from 'src/user/user.service';
 
 @Module({
-    imports: [
-      
-      TypeOrmModule.forFeature([UserModel]),
-      PassportModule,
-      JwtModule.register({
-        secret: "jwtConstants.secret",
-        signOptions: { expiresIn: '60s' },
-      }),
-    ],
-    controllers : [AuthController],
-    providers: [JwtStrategy, AuthService,SendMailService,UserService],
-    exports: [],
-  })
+  imports: [
+    TypeOrmModule.forFeature([UserModel]),
+    PassportModule,
+    JwtModule.register({
+      secret: 'jwtConstants.secret',
+      signOptions: { expiresIn: '600s' },
+    }),
+  ],
+  controllers: [AuthController],
+  providers: [JwtStrategy, AuthService, SendMailService, UserService],
+  exports: [],
+})
 export class AuthModule {}
