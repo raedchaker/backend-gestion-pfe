@@ -157,18 +157,24 @@ export class SoutenanceService {
             throw new NotFoundException('email du president de examinateur n\'existe pas ou ne represente pas un enseignant');
         }
 
-
-        newSoutenance.examinateur = examinateur.id.toString();
+        const newSoutUp = {
+            date: newSoutenance.date,
+            heur: newSoutenance.heur,
+            sujet: sujet.id.toString(),
+            examinateur: examinateur.id.toString(),
+            presidentJury: presidentJury.id.toString(),
+        }
+/*        newSoutenance.examinateur = examinateur.id.toString();
         newSoutenance.presidentJury = presidentJury.id.toString();
         newSoutenance.sujet = sujet.id.toString();
 
         newSoutenance.insNumber= null;
         newSoutenance.nom_presidentJury= null;
-        newSoutenance.nom_examinateur= null;
+        newSoutenance.nom_examinateur= null;*/
         const soutenanceToBeModified = await this.SoutenanceRepository.findOne(id_old);
         const soutenance =await this.SoutenanceRepository.preload({
             id: soutenanceToBeModified.id,
-            ...newSoutenance
+            ...newSoutUp
         });
         console.log('soutenance preloaded',soutenance)
         if (!soutenance) {
