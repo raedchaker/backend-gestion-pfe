@@ -16,4 +16,8 @@ export class CreateSubjectDto {
   @IsString()
   @IsNotEmpty()
   teacher: string;
+
+  @IsString()
+  @IsNotEmpty()
+  year: string;
 }

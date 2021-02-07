@@ -12,7 +12,8 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { SendMailService } from './generics/send-mail/send-mail.service';
 import { FileUploadService } from './generics/file-upload/file-upload.service';
 import { CorsMiddleware } from '@nest-middlewares/cors';
-import { SoutenanceModule } from './soutenance/soutenance.module';
+import {SoutenanceModule} from "./soutenance/soutenance.module";
+import { CollegeYearModule } from './college-year/college-year.module';
 
 dotenv.config();
 
@@ -55,6 +56,8 @@ const corsOptions = {
       },
     }),
     SoutenanceModule,
+      SoutenanceModule,
+      CollegeYearModule
   ],
   controllers: [AppController],
   providers: [AppService, FileUploadService],

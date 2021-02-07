@@ -29,13 +29,36 @@ export class SubjectService {
         full_subjects.push({ ...subjects[i], teacher, student });
       }
     }
-
     /*  subjects.forEach(async subject => {
       const student = await this.SubjectRepository.findOne(subject.student);
       const teacher = await this.SubjectRepository.findOne(subject.teacher);
       full_subjects.push({ ...subject, teacher, student });
     });*/
+    return full_subjects;
+  }
 
+  async findThisYearSubjects() {
+    const d = new Date();
+    let year = d.getFullYear();
+    if(d.getMonth()>10) year++;
+    const full_subjects = [];
+    let subjects = await this.SubjectRepository.find();
+    subjects = subjects.filter(s => s.year == year.toString() )
+    for (var i = 0; i < subjects.length; i++) {
+      const student = await this.UserRepository.findOne(subjects[i].student);
+
+      if (!subjects[i].teacher) {
+        full_subjects.push({ ...subjects[i], student });
+      } else {
+        const teacher = await this.UserRepository.findOne(subjects[i].teacher);
+        full_subjects.push({ ...subjects[i], teacher, student });
+      }
+    }
+    /*  subjects.forEach(async subject => {
+      const student = await this.SubjectRepository.findOne(subject.student);
+      const teacher = await this.SubjectRepository.findOne(subject.teacher);
+      full_subjects.push({ ...subject, teacher, student });
+    });*/
     return full_subjects;
   }
   async findSubjectByStudentId(id: number) {
@@ -80,6 +103,43 @@ export class SubjectService {
     subject.teacher = teacher.id.toString();
     subject.student = student.id.toString();
     return await this.SubjectRepository.save(subject);
+  }
+
+
+  async getAllSubjectsByTeacherId(teacherId: string): Promise<SubjectModel[]>{
+    const full_subjects = [];
+    const subjects = await this.SubjectRepository.find({teacher: teacherId});
+    for (var i = 0; i < subjects.length; i++) {
+      const student = await this.UserRepository.findOne(subjects[i].student);
+
+      if (!subjects[i].teacher) {
+        full_subjects.push({ ...subjects[i], student });
+      } else {
+        const teacher = await this.UserRepository.findOne(subjects[i].teacher);
+        full_subjects.push({ ...subjects[i], teacher, student });
+      }
+    }
+    return full_subjects;
+  }
+
+  async getThisYearSubjectsByTeacherId(teacherId: string): Promise<SubjectModel[]>{
+    const d = new Date();
+    let year = d.getFullYear();
+    if(d.getMonth()>10) year++;
+    const full_subjects = [];
+    let subjects = await this.SubjectRepository.find({teacher: teacherId});
+    subjects = subjects.filter(s => s.year == year.toString() )
+    for (var i = 0; i < subjects.length; i++) {
+      const student = await this.UserRepository.findOne(subjects[i].student);
+
+      if (!subjects[i].teacher) {
+        full_subjects.push({ ...subjects[i], student });
+      } else {
+        const teacher = await this.UserRepository.findOne(subjects[i].teacher);
+        full_subjects.push({ ...subjects[i], teacher, student });
+      }
+    }
+    return full_subjects;
   }
 
   async deleteSubject(id: number) {

@@ -6,7 +6,7 @@ import {
   OneToMany,
   OneToOne,
 } from 'typeorm';
-import { Timestamp } from '../../generics/Timestamp';
+import { Timestamp } from '../../generics/timestamp';
 import { SubjectModel } from '../../subject/models/subject.model';
 
 export enum UserRoleEnum {

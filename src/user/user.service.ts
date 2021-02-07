@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Exception } from 'handlebars';
 import { UserCreateDTO } from 'src/auth/dto/user-create.dto';
 import { ObjectID, Repository } from 'typeorm';
+import { UserUpdateDTO } from './dto/user-update.dto';
 import { UserModel } from './models/user.model';
 
 @Injectable()
@@ -16,6 +18,14 @@ export class UserService {
     @InjectRepository(UserModel)
     private readonly userRepository: Repository<UserModel>,
   ) {}
+
+
+  async getUserByEmail(email){
+    const user = await this.userRepository.findOne({ email });
+    if(!user)
+    throw new NotFoundException("User doesn't exist");
+    else return user
+  }
 
   async getAllUsers():Promise<UserModel[]>{
     const users=await this.userRepository.find()
@@ -43,5 +53,40 @@ export class UserService {
   async deleteUser(id:ObjectID){
     return await this.userRepository.delete(id)  /*soft delete is not supported yet by mongo driver */
 
+  }
+
+  async getUserById(id:ObjectID){
+    return await this.userRepository.findOne(id)
+  }
+
+  async updateUser(id:ObjectID,updateUser:UserUpdateDTO){
+    const user=await this.userRepository.findOne(id)
+    if(!user){
+      throw new NotFoundException("User Not Found")
+    }
+
+    if(user.cin !==updateUser.cin){
+     const  user_cin=this.userRepository.findOne({cin:updateUser.cin})
+     if(user_cin){
+       throw new BadRequestException("Cin already Used")
+     }
+    }
+    if(user.email !==updateUser.email){
+      const  user_email=this.userRepository.findOne({email:updateUser.email})
+      if(user_email){
+        throw new BadRequestException("Email already Used")
+      }
+     }
+     if(user.phone !==updateUser.phone){
+      const  user_phone=this.userRepository.findOne({phone:updateUser.phone})
+      if(user_phone){
+        throw new BadRequestException("Phone already Used")
+      }
+     }
+    user.firstname=updateUser.firstname
+    user.lastname=updateUser.lastname
+
+    this.userRepository.save(user)
+    return user
   }
 }

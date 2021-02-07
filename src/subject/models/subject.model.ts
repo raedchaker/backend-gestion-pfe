@@ -1,3 +1,5 @@
+import { IsOptional } from 'class-validator';
+import { CollegeYearModel } from 'src/college-year/models/college-year.model';
 import { Timestamp } from 'src/generics/timestamp';
 import { UserModel } from 'src/user/models/user.model';
 import {
@@ -53,4 +55,9 @@ export class SubjectModel extends Timestamp {
     length: 255,
   })
   teacher: string;
+
+  @Column({
+    length: 255,
+  })
+  year: string;
 }

@@ -23,13 +23,24 @@ export class UserController {
   }
 
   @Put(":id")
-  async editUser(){
-    return 1;
+  async editUser(@Param('id') id :ObjectID, @Body() user){
+    return this.userService.updateUser(id,user);
   }
 
   @Delete(':id')
   async deleteUser(@Param('id')id:ObjectID){
     return  await this.userService.deleteUser(id)
+  }
+
+  @Post()
+  async getUserByEmail(@Body() email){
+    return await this.userService.getUserByEmail(email.email)
+
+  }
+  @Get(":id")
+  async getUserById(@Param('id') id:ObjectID){
+    return this.userService.getUserById(id)
+
   }
 
 

@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Req } from '@nestjs/common';
 import {SoutenanceService} from "./soutenance.service";
-import { SoutenanceModel } from './Model/soutenance.model';
-import { AjoutSoutenanceDto } from './DTO/AjoutSoutenance.dto';
+import { SoutenanceModel } from './model/soutenance.model';
+import { AjoutSoutenanceDto } from './dto/AjoutSoutenance.dto';
 import {UpdateSoutenanceDto} from "./dto/UpdateSoutenance";
 
 
