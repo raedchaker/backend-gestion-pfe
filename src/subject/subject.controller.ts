@@ -30,6 +30,21 @@ export class SubjectController {
     return await this.subjectService.findAllSubjects();
   }
 
+  @Get('/teacher/:teacherId')
+  async getTeacherSubjects(@Param('teacherId') teacherId: string): Promise<SubjectModel[]> {
+    return await this.subjectService.getAllSubjectsByTeacherId(teacherId);
+  }
+
+  @Get('/currentYear')
+  async getThisYearSubjects(): Promise<SubjectModel[]> {
+    return await this.subjectService.findThisYearSubjects();
+  }
+
+  @Get('/currentYear/teacher/:teacherId')
+  async getThisYearSubjectsByTeacherId(@Param('teacherId') teacherId: string): Promise<SubjectModel[]> {
+    return await this.subjectService.getThisYearSubjectsByTeacherId(teacherId);
+  }
+
   @Get(':id')
   async getSubjectById(@Param('id') id: number) {
     return await this.subjectService.findSubjectById(id);
@@ -48,7 +63,7 @@ export class SubjectController {
 
   //only students should add subjects
   @UseGuards(AuthGuard('jwt'))
-  @Patch('update/:id')
+  @Patch('validate/:id')
   async validateSubject(@Param('id') id: number) {
     return await this.subjectService.validateSubject(id);
   }
