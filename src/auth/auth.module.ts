@@ -6,6 +6,8 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModel } from 'src/user/models/user.model';
+import { SendMailService } from 'src/generics/send-mail/send-mail.service';
+import { UserService } from 'src/user/user.service';
 
 @Module({
   imports: [
@@ -17,7 +19,7 @@ import { UserModel } from 'src/user/models/user.model';
     }),
   ],
   controllers: [AuthController],
-  providers: [JwtStrategy, AuthService],
+  providers: [JwtStrategy, AuthService, SendMailService, UserService],
   exports: [],
 })
 export class AuthModule {}
