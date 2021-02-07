@@ -6,6 +6,7 @@ import { LoginUserDto } from './dto/user-login.dto';
 import { diskStorage } from 'multer';
 import { v4 as uuid } from 'uuid';
 import { PdfFileFilter } from 'src/generics/file-upload/file-upload.service';
+import { ChangePasswordDTO } from './dto/change-password.dto';
 
 
 
@@ -40,6 +41,12 @@ export class AuthController {
   )
   uploadImage(@UploadedFile() file, @Res() res) {
     res.status(HttpStatus.ACCEPTED).send({ fileName: file.filename });
+  }
+
+
+  @Post('change-password')
+  async changePassword(@Body() changePasswordDto:ChangePasswordDTO){
+  return await this.authService.changePassword(changePasswordDto)
   }
 
 }

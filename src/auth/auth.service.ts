@@ -13,9 +13,11 @@ import { JwtService } from '@nestjs/jwt';
 import { UserModel, UserRoleEnum } from 'src/user/models/user.model';
 import { LoginUserDto } from './dto/user-login.dto';
 import { UserCreateDTO } from 'src/auth/dto/user-create.dto';
+import { ChangePasswordDTO } from 'src/auth/dto/change-password.dto';
 import { SendMailService } from 'src/generics/send-mail/send-mail.service';
 import { Exception } from 'handlebars';
 import { UserService } from 'src/user/user.service';
+import { IsEmail } from 'class-validator';
 
 @Injectable()
 export class AuthService {
@@ -23,10 +25,9 @@ export class AuthService {
     private jwtService: JwtService,
     @InjectRepository(UserModel)
     private userRepository: Repository<UserModel>,
-    private mailService:SendMailService,
-    private userService:UserService
+    private mailService: SendMailService,
+    private userService: UserService,
   ) {}
-
 
   async login(credentials: LoginUserDto) {
     const { email, password } = credentials;
@@ -41,7 +42,11 @@ export class AuthService {
       if (await bcrypt.compare(password, user.password)) {
         const payload = {
           email: user.email,
-          role: user.role
+          role: user.role,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          phone: user.phone,
+          cin: user.cin,
         };
         const jwt = this.jwtService.sign(payload);
         return {
@@ -54,7 +59,7 @@ export class AuthService {
   }
 
   async getStudentByIns(insNumber): Promise<UserModel | boolean> {
-    const student = await this.userRepository.findOne({insNumber});
+    const student = await this.userRepository.findOne({ insNumber });
     //console.log(student)
     return student === undefined ? false : student;
   }
@@ -72,22 +77,22 @@ export class AuthService {
     });
 
     user.salt = await bcrypt.genSalt();
-    
 
-    
     try {
-        try{
-          const users=this.userService.searchUses({
-           cin: user.cin,
-            phone:user.phone,
-           email:user.email
-          })
-          if((await users).length !==0)
+      try {
+        const users = this.userService.searchUses({
+          cin: user.cin,
+          phone: user.phone,
+          email: user.email,
+        });
+        if ((await users).length !== 0)
           throw new ConflictException(`Duplicate email or cin or phone `);
-          this.mailService.sendMail(user.email,`Hello ${user.firstname } ! You can login to the plateform PFE_INSAT using this email adress and ${user.password} as a password . `)
-        }
-      catch(e){
-        throw new Exception("Mail can't be sent , user not created")
+        this.mailService.sendMail(
+          user.email,
+          `Hello ${user.firstname} ! You can login to the plateform PFE_INSAT using this email adress and ${user.password} as a password . `,
+        );
+      } catch (e) {
+        throw new Exception("Mail can't be sent , user not created");
       }
       user.password = await bcrypt.hash(user.password, user.salt);
       await this.userRepository.save(user);
@@ -103,5 +108,25 @@ export class AuthService {
       email: user.email,
       role: user.role,
     };
+  }
+
+  async changePassword(changePwdDto: ChangePasswordDTO) {
+    const { email, old_pwd, new_pwd, r_new_pwd } = changePwdDto;
+    if (new_pwd !== r_new_pwd)
+      throw new NotFoundException('Passwords are different ');
+    const user = await this.userRepository.findOne({ email: email });
+    if (!user) {
+      throw new NotFoundException("User doesn't exist");
+    }
+
+    if (await bcrypt.compare(old_pwd, user.password)) {
+      this.mailService.sendMail(
+        user.email,
+        `Hello ${user.firstname} ! You can login to the plateform PFE_INSAT using this email adress and ${new_pwd} as a password . `,
+      );
+      user.password = await bcrypt.hash(new_pwd, user.salt);
+      this.userRepository.save(user);
+      return user;
+    } else throw new NotFoundException('Old password is incorrect');
   }
 }
