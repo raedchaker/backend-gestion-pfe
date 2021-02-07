@@ -53,28 +53,4 @@ export class SubjectModel extends Timestamp {
     length: 255,
   })
   teacher: string;
-
-  /* @OneToOne(
-    type => UserModel,
-    user => user.studentSubject,
-    {
-      nullable: true,
-      cascade: ['insert', 'update'],
-      onDelete: 'SET NULL',
-      eager: true,
-    },
-  )
-  student: UserModel;
-
-  @ManyToOne(
-    type => UserModel,
-    user => user.teacherSubject,
-    {
-      nullable: true,
-      cascade: ['insert', 'update'],
-      onDelete: 'SET NULL',
-      eager: true,
-    },
-  )
-  teacher: UserModel;*/
 }
