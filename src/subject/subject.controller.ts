@@ -35,6 +35,10 @@ export class SubjectController {
     return await this.subjectService.findSubjectById(id);
   }
 
+  @Get('/findByInsNumber/:studentID')
+  async getSubjectByStudentId(@Param('studentID') studentID: number) {
+    return await this.subjectService.findSubjectByStudentId(studentID);  }
+
   //only students should add subjects
   @UseGuards(AuthGuard('jwt'))
   @Post()

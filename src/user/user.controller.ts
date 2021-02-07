@@ -13,7 +13,10 @@ export class UserController {
   async getAllUsers():Promise<Partial<UserModel>[]>{
     return await this.userService.getAllUsers(); 
   }
-
+  @Get(':insNumber')
+  async getUserByInsNumber(@Param('insNumber') insNumber):Promise<Partial<UserModel>>{
+    return await this.userService.getUserByInsNumber(+insNumber);
+  }
   @Post("search")
   async searchUsers(@Body()search:Partial<UserCreateDTO>):Promise<Partial<UserModel>[]>{
     return await this.userService.searchUses(search)

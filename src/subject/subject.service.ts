@@ -38,6 +38,8 @@ export class SubjectService {
 
     return full_subjects;
   }
+  async findSubjectByStudentId(id: number) {
+    return await this.SubjectRepository.findOne({student: id.toString()});}
 
   async findSubjectById(id: number) {
     const subject = await this.SubjectRepository.findOne(id);

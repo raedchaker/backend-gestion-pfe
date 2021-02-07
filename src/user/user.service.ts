@@ -28,6 +28,10 @@ export class UserService {
     return users2
   }
 
+  async getUserByInsNumber(insNumber: number):Promise<UserModel>{
+    return await this.userRepository.findOne({insNumber: insNumber});
+
+  }
   async searchUses(search:Partial<UserCreateDTO>){
     const users = await this.userRepository.find({...search})
   

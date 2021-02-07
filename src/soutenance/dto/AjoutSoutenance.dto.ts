@@ -12,7 +12,7 @@ export class AjoutSoutenanceDto {
     heur;
 
     @IsNotEmpty()
-    sujet: string;
+    insNumber: number;
 
     @IsString()
     @IsNotEmpty()
