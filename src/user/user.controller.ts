@@ -24,6 +24,11 @@ export class UserController {
 
   @Put(":id")
   async editUser(@Param('id') id :ObjectID, @Body() user){
+    console.log("debut")
+    console.log(id)
+    console.log(user)
+    console.log("fin")
+
     return this.userService.updateUser(id,user);
   }
 
@@ -37,9 +42,11 @@ export class UserController {
     return await this.userService.getUserByEmail(email.email)
 
   }
-  @Get(":id")
+  @Get("get/:id")
   async getUserById(@Param('id') id:ObjectID){
-    return this.userService.getUserById(id)
+    console.log(id)
+
+    return await this.userService.getUserById(id)
 
   }
 

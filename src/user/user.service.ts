@@ -56,6 +56,7 @@ export class UserService {
   }
 
   async getUserById(id:ObjectID){
+    console.log(id)
     return await this.userRepository.findOne(id)
   }
 
