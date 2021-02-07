@@ -1,3 +1,5 @@
+import { IsOptional } from 'class-validator';
+import { CollegeYearModel } from 'src/college-year/models/college-year.model';
 import { Timestamp } from 'src/generics/timestamp';
 import { UserModel } from 'src/user/models/user.model';
 import {
@@ -54,27 +56,8 @@ export class SubjectModel extends Timestamp {
   })
   teacher: string;
 
-  /* @OneToOne(
-    type => UserModel,
-    user => user.studentSubject,
-    {
-      nullable: true,
-      cascade: ['insert', 'update'],
-      onDelete: 'SET NULL',
-      eager: true,
-    },
-  )
-  student: UserModel;
-
-  @ManyToOne(
-    type => UserModel,
-    user => user.teacherSubject,
-    {
-      nullable: true,
-      cascade: ['insert', 'update'],
-      onDelete: 'SET NULL',
-      eager: true,
-    },
-  )
-  teacher: UserModel;*/
+  @Column({
+    length: 255,
+  })
+  year: string;
 }

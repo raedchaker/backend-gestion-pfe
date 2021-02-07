@@ -8,6 +8,8 @@ import { UserModule } from './user/user.module';
 import { UserModel } from './user/models/user.model';
 import { AuthModule } from './auth/auth.module';
 import { CorsMiddleware } from '@nest-middlewares/cors';
+import {SoutenanceModule} from "./soutenance/soutenance.module";
+import { CollegeYearModule } from './college-year/college-year.module';
 
 dotenv.config();
 
@@ -28,6 +30,8 @@ const corsOptions = {
     }),
     SubjectModule,
     AuthModule,
+      SoutenanceModule,
+      CollegeYearModule
   ],
   controllers: [AppController],
   providers: [AppService],
