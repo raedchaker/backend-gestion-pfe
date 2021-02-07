@@ -27,7 +27,7 @@ export class UserCreateDTO {
   @MaxLength(50)
   firstname: string;
 
-  @IsPhoneNumber()
+  @IsPhoneNumber('TN',{message:"Please add +216"})
   phone: string;
 
   @IsString()
